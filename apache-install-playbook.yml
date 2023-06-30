@@ -1,0 +1,66 @@
+# Play 1
+- name: Installing Apache on Amazon Linux nodes
+  hosts: amazon-linux-hosts
+
+  tasks:
+    - name: Upgrading all packages on the server # Name of the task
+      ansible.builtin.yum: # the ansible module
+        name: '*'
+        state: latest # parameters of the module
+    - name: Installing the lates version of Apache on the Server 
+      ansible.builtin.yum:
+        name: httpd
+        state: latest
+    - name: Start service httpd if not started 
+      ansible.builtin.service:
+        name: httpd
+        state: started
+    - name: Enable service httpd, on boot up run
+      ansible.builtin.service:
+       name: httpd
+       enabled: yes
+    - name: Copy index.html from controler to the nodes
+      ansible.builtin.copy:
+       src: /root/index.html
+       dest: /var/www/html
+# Play 2 
+- name: Installing Apache on Ubuntu nodes
+  hosts: ubuntu-hosts
+
+  tasks:
+    - name: Updating all Apache packages on the server # Name of the task
+      ansible.builtin.apt: # the ansible module
+        name: '*'
+        state: latest # parameters of the module- name: Install Apache 
+    - name: Installing latest version of  Apache on the Server
+      ansible.builtin.apt:
+        name: apache2
+        state: latest
+    - name: Start service apache2 if not started 
+      ansible.builtin.service:
+        name: apache2
+        state: started
+    - name: Enable service apache2,on boot up and run
+      ansible.builtin.service:
+        name: apache2
+        enabled: yes
+    - name: Copy index.html from controler to the nodes
+      ansible.builtin.copy:
+        src: /root/index.html
+        dest: /var/www/html/   
+
+        
+  # play 3
+
+- name: Installing git on all nodes
+  hosts: all
+
+  tasks:
+    - name: installing GIT on all the nodes in the inventory file
+      ansible.builtin.yum:
+        name: git
+        state: present
+
+
+
+ 
